@@ -1,3 +1,13 @@
+## NEXT
+
+* Aligns Dart and Flutter SDK constraints.
+
+## 2.2.6
+
+* Updates links for the merge of flutter/plugins into flutter/packages.
+* Updates minimum Flutter version to 3.0.
+
+
 ## 2.2.5
 
 * Updates code for stricter lint checks.
