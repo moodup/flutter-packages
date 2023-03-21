@@ -4,8 +4,7 @@
 
 import 'dart:ui' show Offset;
 
-import 'package:flutter/foundation.dart'
-    show immutable, ValueChanged, VoidCallback;
+import 'package:flutter/foundation.dart' show immutable, ValueChanged, VoidCallback;
 
 import 'types.dart';
 
@@ -88,10 +87,7 @@ class InfoWindow {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is InfoWindow &&
-        title == other.title &&
-        snippet == other.snippet &&
-        anchor == other.anchor;
+    return other is InfoWindow && title == other.title && snippet == other.snippet && anchor == other.anchor;
   }
 
   @override
@@ -109,7 +105,7 @@ class InfoWindow {
 @immutable
 class MarkerId extends MapsObjectId<Marker> {
   /// Creates an immutable identifier for a [Marker].
-  const MarkerId(String value) : super(value);
+  const MarkerId(super.value);
 }
 
 /// Marks a geographical location on the map.

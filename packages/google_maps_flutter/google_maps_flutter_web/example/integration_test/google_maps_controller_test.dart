@@ -16,10 +16,6 @@ import 'package:mockito/mockito.dart';
 
 import 'google_maps_controller_test.mocks.dart';
 
-// This value is used when comparing long~num, like
-// LatLng values.
-const double _acceptableDelta = 0.0000000001;
-
 @GenerateMocks(<Type>[], customMocks: <MockSpec<dynamic>>[
   MockSpec<CirclesController>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<PolygonsController>(onMissingStub: OnMissingStub.returnDefault),
@@ -38,17 +34,15 @@ void main() {
 
     // Creates a controller with the default mapId and stream controller, and any `options` needed.
     GoogleMapController createController({
-      CameraPosition initialCameraPosition =
-          const CameraPosition(target: LatLng(0, 0)),
+      CameraPosition initialCameraPosition = const CameraPosition(target: LatLng(0, 0)),
       MapObjects mapObjects = const MapObjects(),
       MapConfiguration mapConfiguration = const MapConfiguration(),
     }) {
       return GoogleMapController(
         mapId: mapId,
         streamController: stream,
-        widgetConfiguration: MapWidgetConfiguration(
-            initialCameraPosition: initialCameraPosition,
-            textDirection: TextDirection.ltr),
+        widgetConfiguration:
+            MapWidgetConfiguration(initialCameraPosition: initialCameraPosition, textDirection: TextDirection.ltr),
         mapObjects: mapObjects,
         mapConfiguration: mapConfiguration,
       );
@@ -66,8 +60,7 @@ void main() {
       testWidgets('constructor creates widget', (WidgetTester tester) async {
         expect(controller.widget, isNotNull);
         expect(controller.widget, isA<HtmlElementView>());
-        expect((controller.widget! as HtmlElementView).viewType,
-            endsWith('$mapId'));
+        expect((controller.widget! as HtmlElementView).viewType, endsWith('$mapId'));
       });
 
       testWidgets('widget is cached when reused', (WidgetTester tester) async {
@@ -77,16 +70,14 @@ void main() {
       });
 
       group('dispose', () {
-        testWidgets('closes the stream and removes the widget',
-            (WidgetTester tester) async {
+        testWidgets('closes the stream and removes the widget', (WidgetTester tester) async {
           controller.dispose();
 
           expect(stream.isClosed, isTrue);
           expect(controller.widget, isNull);
         });
 
-        testWidgets('cannot call getVisibleRegion after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot call getVisibleRegion after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() async {
@@ -94,8 +85,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('cannot call getScreenCoordinate after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot call getScreenCoordinate after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() async {
@@ -105,8 +95,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('cannot call getLatLng after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot call getLatLng after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() async {
@@ -116,8 +105,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('cannot call moveCamera after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot call moveCamera after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() async {
@@ -125,8 +113,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('cannot call getZoomLevel after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot call getZoomLevel after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() async {
@@ -134,8 +121,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('cannot updateCircles after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot updateCircles after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() {
@@ -148,8 +134,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('cannot updatePolygons after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot updatePolygons after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() {
@@ -162,8 +147,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('cannot updatePolylines after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot updatePolylines after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() {
@@ -176,8 +160,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('cannot updateMarkers after dispose',
-            (WidgetTester tester) async {
+        testWidgets('cannot updateMarkers after dispose', (WidgetTester tester) async {
           controller.dispose();
 
           expect(() {
@@ -198,8 +181,7 @@ void main() {
           }, throwsAssertionError);
         });
 
-        testWidgets('isInfoWindowShown defaults to false',
-            (WidgetTester tester) async {
+        testWidgets('isInfoWindowShown defaults to false', (WidgetTester tester) async {
           controller.dispose();
 
           expect(controller.isInfoWindowShown(const MarkerId('any')), false);
@@ -260,8 +242,7 @@ void main() {
         expect(events[4], isA<CameraIdleEvent>());
       });
 
-      testWidgets("binds geometry controllers to map's",
-          (WidgetTester tester) async {
+      testWidgets("binds geometry controllers to map's", (WidgetTester tester) async {
         controller = createController();
         controller.debugSetOverrides(
           createMap: (_, __) => map,
@@ -335,16 +316,10 @@ void main() {
 
         controller.init();
 
-        final Set<Circle> capturedCircles =
-            verify(circles.addCircles(captureAny)).captured[0] as Set<Circle>;
-        final Set<Marker> capturedMarkers =
-            verify(markers.addMarkers(captureAny)).captured[0] as Set<Marker>;
-        final Set<Polygon> capturedPolygons =
-            verify(polygons.addPolygons(captureAny)).captured[0]
-                as Set<Polygon>;
-        final Set<Polyline> capturedPolylines =
-            verify(polylines.addPolylines(captureAny)).captured[0]
-                as Set<Polyline>;
+        final Set<Circle> capturedCircles = verify(circles.addCircles(captureAny)).captured[0] as Set<Circle>;
+        final Set<Marker> capturedMarkers = verify(markers.addMarkers(captureAny)).captured[0] as Set<Marker>;
+        final Set<Polygon> capturedPolygons = verify(polygons.addPolygons(captureAny)).captured[0] as Set<Polygon>;
+        final Set<Polyline> capturedPolylines = verify(polylines.addPolylines(captureAny)).captured[0] as Set<Polyline>;
 
         expect(capturedCircles.first.circleId.value, 'circle-1');
         expect(capturedCircles.first.zIndex, 1234);
@@ -352,14 +327,12 @@ void main() {
         expect(capturedMarkers.first.infoWindow.snippet, 'snippet for test');
         expect(capturedMarkers.first.infoWindow.title, 'title for test');
         expect(capturedPolygons.first.polygonId.value, 'polygon-1');
-        expect(capturedPolygons.elementAt(1).polygonId.value,
-            'polygon-2-with-holes');
+        expect(capturedPolygons.elementAt(1).polygonId.value, 'polygon-2-with-holes');
         expect(capturedPolygons.elementAt(1).holes, isNot(null));
         expect(capturedPolylines.first.polylineId.value, 'polyline-1');
       });
 
-      testWidgets('empty infoWindow does not create InfoWindow instance.',
-          (WidgetTester tester) async {
+      testWidgets('empty infoWindow does not create InfoWindow instance.', (WidgetTester tester) async {
         controller = createController(
             mapObjects: MapObjects(markers: <Marker>{
           const Marker(markerId: MarkerId('marker-1')),
@@ -371,8 +344,7 @@ void main() {
 
         controller.init();
 
-        final Set<Marker> capturedMarkers =
-            verify(markers.addMarkers(captureAny)).captured[0] as Set<Marker>;
+        final Set<Marker> capturedMarkers = verify(markers.addMarkers(captureAny)).captured[0] as Set<Marker>;
 
         expect(capturedMarkers.first.infoWindow, InfoWindow.noText);
       });
@@ -388,8 +360,7 @@ void main() {
             mapType: MapType.satellite,
             zoomControlsEnabled: true,
           ));
-          controller.debugSetOverrides(
-              createMap: (_, gmaps.MapOptions options) {
+          controller.debugSetOverrides(createMap: (_, gmaps.MapOptions options) {
             capturedOptions = options;
             return map;
           });
@@ -400,18 +371,15 @@ void main() {
           expect(capturedOptions!.mapTypeId, gmaps.MapTypeId.SATELLITE);
           expect(capturedOptions!.zoomControl, true);
           expect(capturedOptions!.gestureHandling, 'auto',
-              reason:
-                  'by default the map handles zoom/pan gestures internally');
+              reason: 'by default the map handles zoom/pan gestures internally');
         });
 
-        testWidgets('disables gestureHandling with scrollGesturesEnabled false',
-            (WidgetTester tester) async {
+        testWidgets('disables gestureHandling with scrollGesturesEnabled false', (WidgetTester tester) async {
           controller = createController(
               mapConfiguration: const MapConfiguration(
             scrollGesturesEnabled: false,
           ));
-          controller.debugSetOverrides(
-              createMap: (_, gmaps.MapOptions options) {
+          controller.debugSetOverrides(createMap: (_, gmaps.MapOptions options) {
             capturedOptions = options;
             return map;
           });
@@ -420,18 +388,15 @@ void main() {
 
           expect(capturedOptions, isNotNull);
           expect(capturedOptions!.gestureHandling, 'none',
-              reason:
-                  'disabling scroll gestures disables all gesture handling');
+              reason: 'disabling scroll gestures disables all gesture handling');
         });
 
-        testWidgets('disables gestureHandling with zoomGesturesEnabled false',
-            (WidgetTester tester) async {
+        testWidgets('disables gestureHandling with zoomGesturesEnabled false', (WidgetTester tester) async {
           controller = createController(
               mapConfiguration: const MapConfiguration(
             zoomGesturesEnabled: false,
           ));
-          controller.debugSetOverrides(
-              createMap: (_, gmaps.MapOptions options) {
+          controller.debugSetOverrides(createMap: (_, gmaps.MapOptions options) {
             capturedOptions = options;
             return map;
           });
@@ -440,12 +405,10 @@ void main() {
 
           expect(capturedOptions, isNotNull);
           expect(capturedOptions!.gestureHandling, 'none',
-              reason:
-                  'disabling scroll gestures disables all gesture handling');
+              reason: 'disabling scroll gestures disables all gesture handling');
         });
 
-        testWidgets('sets initial position when passed',
-            (WidgetTester tester) async {
+        testWidgets('sets initial position when passed', (WidgetTester tester) async {
           controller = createController(
             initialCameraPosition: const CameraPosition(
               target: LatLng(43.308, -5.6910),
@@ -453,8 +416,7 @@ void main() {
             ),
           );
 
-          controller.debugSetOverrides(
-              createMap: (_, gmaps.MapOptions options) {
+          controller.debugSetOverrides(createMap: (_, gmaps.MapOptions options) {
             capturedOptions = options;
             return map;
           });
@@ -474,8 +436,7 @@ void main() {
           expect(controller.trafficLayer, isNull);
         });
 
-        testWidgets('initializes with traffic layer',
-            (WidgetTester tester) async {
+        testWidgets('initializes with traffic layer', (WidgetTester tester) async {
           controller = createController(
               mapConfiguration: const MapConfiguration(
             trafficEnabled: true,
@@ -532,14 +493,12 @@ void main() {
       group('viewport getters', () {
         testWidgets('getVisibleRegion', (WidgetTester tester) async {
           final gmaps.LatLng gmCenter = map.center!;
-          final LatLng center =
-              LatLng(gmCenter.lat.toDouble(), gmCenter.lng.toDouble());
+          final LatLng center = LatLng(gmCenter.lat.toDouble(), gmCenter.lng.toDouble());
 
           final LatLngBounds bounds = await controller.getVisibleRegion();
 
           expect(bounds.contains(center), isTrue,
-              reason:
-                  'The computed visible region must contain the center of the created map.');
+              reason: 'The computed visible region must contain the center of the created map.');
         });
 
         testWidgets('getZoomLevel', (WidgetTester tester) async {
@@ -548,20 +507,7 @@ void main() {
       });
 
       group('moveCamera', () {
-        testWidgets('newLatLngZoom', (WidgetTester tester) async {
-          await controller.moveCamera(
-            CameraUpdate.newLatLngZoom(
-              const LatLng(19, 26),
-              12,
-            ),
-          );
-
-          final gmaps.LatLng gmCenter = map.center!;
-
-          expect(map.zoom, 12);
-          expect(gmCenter.lat, closeTo(19, _acceptableDelta));
-          expect(gmCenter.lng, closeTo(26, _acceptableDelta));
-        });
+        // Tested in projection_test.dart
       });
 
       group('map.projection methods', () {

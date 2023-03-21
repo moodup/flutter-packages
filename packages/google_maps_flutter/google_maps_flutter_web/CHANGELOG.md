@@ -1,3 +1,17 @@
+## 0.4.0+7
+
+* Clarifies explanation of endorsement in README.
+* Aligns Dart and Flutter SDK constraints.
+
+## 0.4.0+6
+
+* Updates links for the merge of flutter/plugins into flutter/packages.
+* Updates minimum Flutter version to 3.0.
+
+## 0.4.0+5
+
+* Updates code for stricter lint checks.
+
 ## 0.4.0+4
 
 * Updates code for stricter lint checks.

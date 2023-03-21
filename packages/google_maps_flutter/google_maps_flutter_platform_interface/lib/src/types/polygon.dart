@@ -3,8 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart'
-    show immutable, listEquals, VoidCallback;
+import 'package:flutter/foundation.dart' show immutable, listEquals, VoidCallback;
 import 'package:flutter/material.dart' show Color, Colors;
 
 import 'types.dart';
@@ -15,7 +14,7 @@ import 'types.dart';
 @immutable
 class PolygonId extends MapsObjectId<Polygon> {
   /// Creates an immutable identifier for a [Polygon].
-  const PolygonId(String value) : super(value);
+  const PolygonId(super.value);
 }
 
 /// Draws a polygon through geographical locations on the map.
