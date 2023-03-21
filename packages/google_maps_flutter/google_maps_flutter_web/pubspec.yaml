@@ -2,6 +2,7 @@ name: google_maps_flutter_web
 description: Web platform implementation of google_maps_flutter
 repository: https://github.com/flutter/plugins/tree/main/packages/google_maps_flutter/google_maps_flutter_web
 issue_tracker: https://github.com/flutter/flutter/issues?q=is%3Aissue+is%3Aopen+label%3A%22p%3A+maps%22
+publish_to: 'none'
 version: 0.4.0+4
 
 environment:
@@ -24,9 +25,9 @@ dependencies:
   google_maps: ^6.1.0
   google_maps_flutter_platform_interface:
     git:
-        url: https://github.com/moodup/flutter_plugins.git
+        url: https://github.com/moodup/flutter-packages.git
         path: packages/google_maps_flutter/google_maps_flutter_platform_interface/
-        ref: task/google_maps_2.2.1
+        ref: google_maps_2.2.5
   sanitize_html: ^2.0.0
   stream_transform: ^2.0.0
 
