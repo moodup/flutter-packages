@@ -11,7 +11,7 @@ import 'types.dart';
 @immutable
 class GroundOverlayId extends MapsObjectId<GroundOverlay> {
   /// Creates an immutable identifier for a [GroundOverlay].
-  GroundOverlayId(String value) : super(value);
+  const GroundOverlayId(super.value);
 }
 
 /// Draws a ground overlay on the map.
