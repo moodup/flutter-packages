@@ -7,7 +7,6 @@ package io.flutter.plugins.googlemaps;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import androidx.annotation.VisibleForTesting;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -25,6 +24,7 @@ import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.maps.model.SquareCap;
 import com.google.android.gms.maps.model.Tile;
+import io.flutter.view.FlutterMain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,16 +49,15 @@ class Convert {
       case "fromAsset":
         if (data.size() == 2) {
           return BitmapDescriptorFactory.fromAsset(
-              io.flutter.view.FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
+              FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
         } else {
           return BitmapDescriptorFactory.fromAsset(
-              io.flutter.view.FlutterMain.getLookupKeyForAsset(
-                  toString(data.get(1)), toString(data.get(2))));
+              FlutterMain.getLookupKeyForAsset(toString(data.get(1)), toString(data.get(2))));
         }
       case "fromAssetImage":
         if (data.size() == 3) {
           return BitmapDescriptorFactory.fromAsset(
-              io.flutter.view.FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
+              FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
         } else {
           throw new IllegalArgumentException(
               "'fromAssetImage' Expected exactly 3 arguments, got: " + data.size());
@@ -214,6 +213,15 @@ class Convert {
     data.put("x", x);
     data.put("y", y);
     data.put("zoom", zoom);
+    return data;
+  }
+
+   static Object groundOverlayIdToJson(String groundOverlayId) {
+    if (groundOverlayId == null) {
+      return null;
+    }
+    final Map<String, Object> data = new HashMap<>(1);
+    data.put("groundOverlayId", groundOverlayId);
     return data;
   }
 
@@ -593,14 +601,63 @@ class Convert {
     }
   }
 
-  @VisibleForTesting
-  static List<LatLng> toPoints(Object o) {
+   static String interpretGroundOverlayOptions(Object o, GroundOverlayOptionsSink sink) {
+    final Map<?, ?> data = toMap(o);
+    final Object consumeTapEvents = data.get("consumeTapEvents");
+    if (consumeTapEvents != null) {
+      sink.setConsumeTapEvents(toBoolean(consumeTapEvents));
+    }
+    final Object transparency = data.get("transparency");
+    if (transparency != null) {
+      sink.setTransparency(toFloat(transparency));
+    }
+
+    final Object width = data.get("width");
+    final Object height = data.get("height");
+    final Object location = data.get("location");
+    final Object bounds = data.get("bounds");
+    if (height != null) {
+      sink.setLocation(toLatLng(location), toFloat(width), toFloat(height), null);
+    } else {
+      if (width != null) {
+        sink.setLocation(toLatLng(location), toFloat(width), null, null);
+      } else {
+        sink.setLocation(null, null, null, toLatLngBounds(bounds));
+      }
+    }
+
+    final Object bearing = data.get("bearing");
+    if (bearing != null) {
+      sink.setBearing(toFloat(bearing));
+    }
+    final Object visible = data.get("visible");
+    if (visible != null) {
+      sink.setVisible(toBoolean(visible));
+    }
+    final Object zIndex = data.get("zIndex");
+    if (zIndex != null) {
+      sink.setZIndex(toFloat(zIndex));
+    }
+
+    final Object bitmap = data.get("bitmap");
+    if (bitmap != null) {
+      sink.setBitmapDescriptor(toBitmapDescriptor(bitmap));
+    }
+    final String groundOverlayId = (String) data.get("groundOverlayId");
+    if (groundOverlayId == null) {
+      throw new IllegalArgumentException("groundOverlayId was null");
+    } else {
+      return groundOverlayId;
+    }
+  }
+
+  private static List<LatLng> toPoints(Object o) {
     final List<?> data = toList(o);
     final List<LatLng> points = new ArrayList<>(data.size());
 
     for (Object rawPoint : data) {
       final List<?> point = toList(rawPoint);
-      points.add(new LatLng(toDouble(point.get(0)), toDouble(point.get(1))));
+      points.add(new LatLng(toFloat(point.get(0)), toFloat(point.get(1))));
     }
     return points;
   }

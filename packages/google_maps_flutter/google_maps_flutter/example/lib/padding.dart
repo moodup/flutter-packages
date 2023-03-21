@@ -19,7 +19,7 @@ class PaddingPage extends GoogleMapExampleAppPage {
 }
 
 class MarkerIconsBody extends StatefulWidget {
-  const MarkerIconsBody({super.key});
+  const MarkerIconsBody({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => MarkerIconsBodyState();

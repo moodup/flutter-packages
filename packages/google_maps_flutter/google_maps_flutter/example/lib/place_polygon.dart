@@ -20,7 +20,7 @@ class PlacePolygonPage extends GoogleMapExampleAppPage {
 }
 
 class PlacePolygonBody extends StatefulWidget {
-  const PlacePolygonBody({super.key});
+  const PlacePolygonBody({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => PlacePolygonBodyState();

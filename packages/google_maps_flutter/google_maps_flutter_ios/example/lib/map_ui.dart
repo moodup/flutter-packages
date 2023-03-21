@@ -27,7 +27,7 @@ class MapUiPage extends GoogleMapExampleAppPage {
 }
 
 class MapUiBody extends StatefulWidget {
-  const MapUiBody({super.key});
+  const MapUiBody({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => MapUiBodyState();

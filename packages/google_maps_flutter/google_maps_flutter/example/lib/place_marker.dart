@@ -25,7 +25,7 @@ class PlaceMarkerPage extends GoogleMapExampleAppPage {
 }
 
 class PlaceMarkerBody extends StatefulWidget {
-  const PlaceMarkerBody({super.key});
+  const PlaceMarkerBody({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => PlaceMarkerBodyState();

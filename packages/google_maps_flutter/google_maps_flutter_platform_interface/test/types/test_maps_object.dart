@@ -41,6 +41,7 @@ class TestMapsObject implements MapsObject<TestMapsObject> {
 }
 
 class TestMapsObjectUpdate extends MapsObjectUpdates<TestMapsObject> {
-  TestMapsObjectUpdate.from(super.previous, super.current)
-      : super.from(objectName: 'testObject');
+  TestMapsObjectUpdate.from(
+      Set<TestMapsObject> previous, Set<TestMapsObject> current)
+      : super.from(previous, current, objectName: 'testObject');
 }

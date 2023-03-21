@@ -22,14 +22,7 @@ void main() {
   });
 
   testWidgets('initialized with latest renderer', (WidgetTester _) async {
-    // There is no guarantee that the server will return the latest renderer
-    // even when requested, so there's no way to deterministically test that.
-    // Instead, just test that the request succeeded and returned a valid
-    // value.
-    expect(
-        initializedRenderer == AndroidMapRenderer.latest ||
-            initializedRenderer == AndroidMapRenderer.legacy,
-        true);
+    expect(initializedRenderer, AndroidMapRenderer.latest);
   });
 
   testWidgets('throws PlatformException on multiple renderer initializations',

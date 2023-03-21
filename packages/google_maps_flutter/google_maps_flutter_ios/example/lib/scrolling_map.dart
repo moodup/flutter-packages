@@ -25,7 +25,7 @@ class ScrollingMapPage extends GoogleMapExampleAppPage {
 }
 
 class ScrollingMapBody extends StatelessWidget {
-  const ScrollingMapBody({super.key});
+  const ScrollingMapBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +95,8 @@ class ScrollingMapBody extends StatelessWidget {
                           ),
                         ),
                       },
-                      gestureRecognizers: <Factory<
-                          OneSequenceGestureRecognizer>>{
+                      gestureRecognizers: <
+                          Factory<OneSequenceGestureRecognizer>>{
                         Factory<OneSequenceGestureRecognizer>(
                           () => ScaleGestureRecognizer(),
                         ),

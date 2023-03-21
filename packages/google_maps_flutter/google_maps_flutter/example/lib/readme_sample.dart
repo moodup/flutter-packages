@@ -12,7 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
 
 // #docregion MapSample
 class MapSample extends StatefulWidget {
-  const MapSample({super.key});
+  const MapSample({Key? key}) : super(key: key);
 
   @override
   State<MapSample> createState() => MapSampleState();

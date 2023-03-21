@@ -1,16 +1,3 @@
-## NEXT
-
-* Aligns Dart and Flutter SDK constraints.
-
-## 2.2.5
-
-* Updates iOS minimum version in README.
-
-## 2.2.4
-
-* Updates links for the merge of flutter/plugins into flutter/packages.
-* Updates minimum Flutter version to 3.0.
-
 ## 2.2.3
 
 * Fixes a minor syntax error in `README.md`.
