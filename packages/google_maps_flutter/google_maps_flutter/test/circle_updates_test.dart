@@ -22,12 +22,13 @@ Widget _mapWithCircles(Set<Circle> circles) {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final FakePlatformViewsController fakePlatformViewsController =
-      FakePlatformViewsController();
+  final FakePlatformViewsController fakePlatformViewsController = FakePlatformViewsController();
 
   setUpAll(() {
-    SystemChannels.platform_views.setMockMethodCallHandler(
-        fakePlatformViewsController.fakePlatformViewsMethodHandler);
+    _ambiguate(TestDefaultBinaryMessengerBinding.instance)!.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform_views,
+          fakePlatformViewsController.fakePlatformViewsMethodHandler,
+        );
   });
 
   setUp(() {
@@ -38,8 +39,7 @@ void main() {
     const Circle c1 = Circle(circleId: CircleId('circle_1'));
     await tester.pumpWidget(_mapWithCircles(<Circle>{c1}));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
     expect(platformGoogleMap.circlesToAdd.length, 1);
 
     final Circle initializedCircle = platformGoogleMap.circlesToAdd.first;
@@ -55,8 +55,7 @@ void main() {
     await tester.pumpWidget(_mapWithCircles(<Circle>{c1}));
     await tester.pumpWidget(_mapWithCircles(<Circle>{c1, c2}));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
     expect(platformGoogleMap.circlesToAdd.length, 1);
 
     final Circle addedCircle = platformGoogleMap.circlesToAdd.first;
@@ -73,8 +72,7 @@ void main() {
     await tester.pumpWidget(_mapWithCircles(<Circle>{c1}));
     await tester.pumpWidget(_mapWithCircles(<Circle>{}));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
     expect(platformGoogleMap.circleIdsToRemove.length, 1);
     expect(platformGoogleMap.circleIdsToRemove.first, equals(c1.circleId));
 
@@ -89,8 +87,7 @@ void main() {
     await tester.pumpWidget(_mapWithCircles(<Circle>{c1}));
     await tester.pumpWidget(_mapWithCircles(<Circle>{c2}));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
     expect(platformGoogleMap.circlesToChange.length, 1);
     expect(platformGoogleMap.circlesToChange.first, equals(c2));
 
@@ -105,8 +102,7 @@ void main() {
     await tester.pumpWidget(_mapWithCircles(<Circle>{c1}));
     await tester.pumpWidget(_mapWithCircles(<Circle>{c2}));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
     expect(platformGoogleMap.circlesToChange.length, 1);
 
     final Circle update = platformGoogleMap.circlesToChange.first;
@@ -125,8 +121,7 @@ void main() {
     await tester.pumpWidget(_mapWithCircles(prev));
     await tester.pumpWidget(_mapWithCircles(cur));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
 
     expect(platformGoogleMap.circlesToChange, cur);
     expect(platformGoogleMap.circleIdsToRemove.isEmpty, true);
@@ -146,8 +141,7 @@ void main() {
     await tester.pumpWidget(_mapWithCircles(prev));
     await tester.pumpWidget(_mapWithCircles(cur));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
 
     expect(platformGoogleMap.circlesToChange.length, 1);
     expect(platformGoogleMap.circlesToAdd.length, 1);
@@ -169,8 +163,7 @@ void main() {
     await tester.pumpWidget(_mapWithCircles(prev));
     await tester.pumpWidget(_mapWithCircles(cur));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
 
     expect(platformGoogleMap.circlesToChange, <Circle>{c3});
     expect(platformGoogleMap.circleIdsToRemove.isEmpty, true);
@@ -186,11 +179,16 @@ void main() {
     await tester.pumpWidget(_mapWithCircles(prev));
     await tester.pumpWidget(_mapWithCircles(cur));
 
-    final FakePlatformGoogleMap platformGoogleMap =
-        fakePlatformViewsController.lastCreatedView!;
+    final FakePlatformGoogleMap platformGoogleMap = fakePlatformViewsController.lastCreatedView!;
 
     expect(platformGoogleMap.circlesToChange.isEmpty, true);
     expect(platformGoogleMap.circleIdsToRemove.isEmpty, true);
     expect(platformGoogleMap.circlesToAdd.isEmpty, true);
   });
 }
+
+/// This allows a value of type T or T? to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become non-nullable can still be used
+/// with `!` and `?` on the stable branch.
+T? _ambiguate<T>(T? value) => value;

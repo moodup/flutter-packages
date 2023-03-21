@@ -7,6 +7,7 @@ package io.flutter.plugins.googlemaps;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import androidx.annotation.VisibleForTesting;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -24,7 +25,6 @@ import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.maps.model.SquareCap;
 import com.google.android.gms.maps.model.Tile;
-import io.flutter.view.FlutterMain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,15 +49,15 @@ class Convert {
       case "fromAsset":
         if (data.size() == 2) {
           return BitmapDescriptorFactory.fromAsset(
-              FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
+              io.flutter.view.getLookupKeyForAsset(toString(data.get(1))));
         } else {
           return BitmapDescriptorFactory.fromAsset(
-              FlutterMain.getLookupKeyForAsset(toString(data.get(1)), toString(data.get(2))));
+              io.flutter.view.getLookupKeyForAsset(toString(data.get(1)), toString(data.get(2))));
         }
       case "fromAssetImage":
         if (data.size() == 3) {
           return BitmapDescriptorFactory.fromAsset(
-              FlutterMain.getLookupKeyForAsset(toString(data.get(1))));
+              io.flutter.view.getLookupKeyForAsset(toString(data.get(1))));
         } else {
           throw new IllegalArgumentException(
               "'fromAssetImage' Expected exactly 3 arguments, got: " + data.size());
@@ -657,7 +657,7 @@ class Convert {
 
     for (Object rawPoint : data) {
       final List<?> point = toList(rawPoint);
-      points.add(new LatLng(toFloat(point.get(0)), toFloat(point.get(1))));
+      points.add(new LatLng(toDouble(point.get(0)), toDouble(point.get(1))));
     }
     return points;
   }

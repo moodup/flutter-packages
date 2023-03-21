@@ -25,11 +25,7 @@ apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 31
-
-    lintOptions {
-        disable 'InvalidPackage'
-    }
+    compileSdkVersion flutter.compileSdkVersion
 
     defaultConfig {
         applicationId "io.flutter.plugins.googlemapsexample"
@@ -65,6 +61,10 @@ android {
         androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
         api 'androidx.test:core:1.2.0'
         testImplementation 'com.google.android.gms:play-services-maps:17.0.0'
+    }
+    namespace 'io.flutter.plugins.googlemapsexample'
+    lint {
+        disable 'InvalidPackage'
     }
 }
 

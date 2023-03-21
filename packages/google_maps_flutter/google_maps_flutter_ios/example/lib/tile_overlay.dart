@@ -14,8 +14,7 @@ import 'example_google_map.dart';
 import 'page.dart';
 
 class TileOverlayPage extends GoogleMapExampleAppPage {
-  const TileOverlayPage({Key? key})
-      : super(const Icon(Icons.map), 'Tile overlay', key: key);
+  const TileOverlayPage({Key? key}) : super(const Icon(Icons.map), 'Tile overlay', key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class TileOverlayPage extends GoogleMapExampleAppPage {
 }
 
 class TileOverlayBody extends StatefulWidget {
-  const TileOverlayBody({Key? key}) : super(key: key);
+  const TileOverlayBody({super.key});
 
   @override
   State<StatefulWidget> createState() => TileOverlayBodyState();
@@ -141,13 +140,11 @@ class _DebugTileProvider implements TileProvider {
       maxWidth: width.toDouble(),
     );
     textPainter.paint(canvas, Offset.zero);
-    canvas.drawRect(
-        Rect.fromLTRB(0, 0, width.toDouble(), width.toDouble()), boxPaint);
+    canvas.drawRect(Rect.fromLTRB(0, 0, width.toDouble(), width.toDouble()), boxPaint);
     final ui.Picture picture = recorder.endRecording();
     final Uint8List byteData = await picture
         .toImage(width, height)
-        .then((ui.Image image) =>
-            image.toByteData(format: ui.ImageByteFormat.png))
+        .then((ui.Image image) => image.toByteData(format: ui.ImageByteFormat.png))
         .then((ByteData? byteData) => byteData!.buffer.asUint8List());
     return Tile(width, height, byteData);
   }

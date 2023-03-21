@@ -29,8 +29,12 @@ void main() {
   ) async {
     // Inject two map widgets...
     await tester.pumpWidget(
+      // TODO(goderbauer): Make this const when this package requires Flutter 3.8 or later.
+      // ignore: prefer_const_constructors
       Directionality(
         textDirection: TextDirection.ltr,
+        // TODO(goderbauer): Make this const when this package requires Flutter 3.8 or later.
+        // ignore: prefer_const_constructors
         child: Column(
           children: const <Widget>[
             GoogleMap(
@@ -81,8 +85,7 @@ class TestGoogleMapsFlutterPlatform extends GoogleMapsFlutterPlatform {
   bool disposed = false;
 
   // Stream controller to inject events for testing.
-  final StreamController<MapEvent<dynamic>> mapEventStreamController =
-      StreamController<MapEvent<dynamic>>.broadcast();
+  final StreamController<MapEvent<dynamic>> mapEventStreamController = StreamController<MapEvent<dynamic>>.broadcast();
 
   @override
   Future<void> init(int mapId) async {}
@@ -151,8 +154,7 @@ class TestGoogleMapsFlutterPlatform extends GoogleMapsFlutterPlatform {
   Future<LatLngBounds> getVisibleRegion({
     required int mapId,
   }) async {
-    return LatLngBounds(
-        southwest: const LatLng(0, 0), northeast: const LatLng(0, 0));
+    return LatLngBounds(southwest: const LatLng(0, 0), northeast: const LatLng(0, 0));
   }
 
   @override

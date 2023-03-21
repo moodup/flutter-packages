@@ -10,10 +10,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FakePlatformGoogleMap {
   FakePlatformGoogleMap(int id, Map<dynamic, dynamic> params)
-      : cameraPosition =
-            CameraPosition.fromMap(params['initialCameraPosition']),
+      : cameraPosition = CameraPosition.fromMap(params['initialCameraPosition']),
         channel = MethodChannel('plugins.flutter.io/google_maps_$id') {
-    channel.setMockMethodCallHandler(onMethodCall);
+    _ambiguate(TestDefaultBinaryMessengerBinding.instance)!
+        .defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, onMethodCall);
     updateOptions(params['options'] as Map<dynamic, dynamic>);
     updateMarkers(params);
     updatePolygons(params);
@@ -93,8 +94,7 @@ class FakePlatformGoogleMap {
   Future<dynamic> onMethodCall(MethodCall call) {
     switch (call.method) {
       case 'map#update':
-        final Map<String, Object?> arguments =
-            (call.arguments as Map<Object?, Object?>).cast<String, Object?>();
+        final Map<String, Object?> arguments = (call.arguments as Map<Object?, Object?>).cast<String, Object?>();
         updateOptions(arguments['options']! as Map<dynamic, dynamic>);
         return Future<void>.sync(() {});
       case 'markers#update':
@@ -107,8 +107,7 @@ class FakePlatformGoogleMap {
         updatePolylines(call.arguments as Map<dynamic, dynamic>?);
         return Future<void>.sync(() {});
       case 'tileOverlays#update':
-        updateTileOverlays(Map.castFrom<dynamic, dynamic, String, dynamic>(
-            call.arguments as Map<dynamic, dynamic>));
+        updateTileOverlays(Map.castFrom<dynamic, dynamic, String, dynamic>(call.arguments as Map<dynamic, dynamic>));
         return Future<void>.sync(() {});
       case 'circles#update':
         updateCircles(call.arguments as Map<dynamic, dynamic>?);
@@ -123,8 +122,7 @@ class FakePlatformGoogleMap {
       return;
     }
     markersToAdd = _deserializeMarkers(markerUpdates['markersToAdd']);
-    markerIdsToRemove = _deserializeMarkerIds(
-        markerUpdates['markerIdsToRemove'] as List<dynamic>?);
+    markerIdsToRemove = _deserializeMarkerIds(markerUpdates['markerIdsToRemove'] as List<dynamic>?);
     markersToChange = _deserializeMarkers(markerUpdates['markersToChange']);
   }
 
@@ -132,9 +130,7 @@ class FakePlatformGoogleMap {
     if (markerIds == null) {
       return <MarkerId>{};
     }
-    return markerIds
-        .map((dynamic markerId) => MarkerId(markerId as String))
-        .toSet();
+    return markerIds.map((dynamic markerId) => MarkerId(markerId as String)).toSet();
   }
 
   Set<Marker> _deserializeMarkers(dynamic markers) {
@@ -143,8 +139,7 @@ class FakePlatformGoogleMap {
     }
     final List<dynamic> markersData = markers as List<dynamic>;
     final Set<Marker> result = <Marker>{};
-    for (final Map<dynamic, dynamic> markerData
-        in markersData.cast<Map<dynamic, dynamic>>()) {
+    for (final Map<dynamic, dynamic> markerData in markersData.cast<Map<dynamic, dynamic>>()) {
       final String markerId = markerData['markerId'] as String;
       final double alpha = markerData['alpha'] as double;
       final bool draggable = markerData['draggable'] as bool;
@@ -153,8 +148,7 @@ class FakePlatformGoogleMap {
       final dynamic infoWindowData = markerData['infoWindow'];
       InfoWindow infoWindow = InfoWindow.noText;
       if (infoWindowData != null) {
-        final Map<dynamic, dynamic> infoWindowMap =
-            infoWindowData as Map<dynamic, dynamic>;
+        final Map<dynamic, dynamic> infoWindowMap = infoWindowData as Map<dynamic, dynamic>;
         infoWindow = InfoWindow(
           title: infoWindowMap['title'] as String?,
           snippet: infoWindowMap['snippet'] as String?,
@@ -178,8 +172,7 @@ class FakePlatformGoogleMap {
       return;
     }
     polygonsToAdd = _deserializePolygons(polygonUpdates['polygonsToAdd']);
-    polygonIdsToRemove = _deserializePolygonIds(
-        polygonUpdates['polygonIdsToRemove'] as List<dynamic>?);
+    polygonIdsToRemove = _deserializePolygonIds(polygonUpdates['polygonIdsToRemove'] as List<dynamic>?);
     polygonsToChange = _deserializePolygons(polygonUpdates['polygonsToChange']);
   }
 
@@ -187,9 +180,7 @@ class FakePlatformGoogleMap {
     if (polygonIds == null) {
       return <PolygonId>{};
     }
-    return polygonIds
-        .map((dynamic polygonId) => PolygonId(polygonId as String))
-        .toSet();
+    return polygonIds.map((dynamic polygonId) => PolygonId(polygonId as String)).toSet();
   }
 
   Set<Polygon> _deserializePolygons(dynamic polygons) {
@@ -198,15 +189,12 @@ class FakePlatformGoogleMap {
     }
     final List<dynamic> polygonsData = polygons as List<dynamic>;
     final Set<Polygon> result = <Polygon>{};
-    for (final Map<dynamic, dynamic> polygonData
-        in polygonsData.cast<Map<dynamic, dynamic>>()) {
+    for (final Map<dynamic, dynamic> polygonData in polygonsData.cast<Map<dynamic, dynamic>>()) {
       final String polygonId = polygonData['polygonId'] as String;
       final bool visible = polygonData['visible'] as bool;
       final bool geodesic = polygonData['geodesic'] as bool;
-      final List<LatLng> points =
-          _deserializePoints(polygonData['points'] as List<dynamic>);
-      final List<List<LatLng>> holes =
-          _deserializeHoles(polygonData['holes'] as List<dynamic>);
+      final List<LatLng> points = _deserializePoints(polygonData['points'] as List<dynamic>);
+      final List<List<LatLng>> holes = _deserializeHoles(polygonData['holes'] as List<dynamic>);
 
       result.add(Polygon(
         polygonId: PolygonId(polygonId),
@@ -240,19 +228,15 @@ class FakePlatformGoogleMap {
       return;
     }
     polylinesToAdd = _deserializePolylines(polylineUpdates['polylinesToAdd']);
-    polylineIdsToRemove = _deserializePolylineIds(
-        polylineUpdates['polylineIdsToRemove'] as List<dynamic>?);
-    polylinesToChange =
-        _deserializePolylines(polylineUpdates['polylinesToChange']);
+    polylineIdsToRemove = _deserializePolylineIds(polylineUpdates['polylineIdsToRemove'] as List<dynamic>?);
+    polylinesToChange = _deserializePolylines(polylineUpdates['polylinesToChange']);
   }
 
   Set<PolylineId> _deserializePolylineIds(List<dynamic>? polylineIds) {
     if (polylineIds == null) {
       return <PolylineId>{};
     }
-    return polylineIds
-        .map((dynamic polylineId) => PolylineId(polylineId as String))
-        .toSet();
+    return polylineIds.map((dynamic polylineId) => PolylineId(polylineId as String)).toSet();
   }
 
   Set<Polyline> _deserializePolylines(dynamic polylines) {
@@ -261,13 +245,11 @@ class FakePlatformGoogleMap {
     }
     final List<dynamic> polylinesData = polylines as List<dynamic>;
     final Set<Polyline> result = <Polyline>{};
-    for (final Map<dynamic, dynamic> polylineData
-        in polylinesData.cast<Map<dynamic, dynamic>>()) {
+    for (final Map<dynamic, dynamic> polylineData in polylinesData.cast<Map<dynamic, dynamic>>()) {
       final String polylineId = polylineData['polylineId'] as String;
       final bool visible = polylineData['visible'] as bool;
       final bool geodesic = polylineData['geodesic'] as bool;
-      final List<LatLng> points =
-          _deserializePoints(polylineData['points'] as List<dynamic>);
+      final List<LatLng> points = _deserializePoints(polylineData['points'] as List<dynamic>);
 
       result.add(Polyline(
         polylineId: PolylineId(polylineId),
@@ -285,8 +267,7 @@ class FakePlatformGoogleMap {
       return;
     }
     circlesToAdd = _deserializeCircles(circleUpdates['circlesToAdd']);
-    circleIdsToRemove = _deserializeCircleIds(
-        circleUpdates['circleIdsToRemove'] as List<dynamic>?);
+    circleIdsToRemove = _deserializeCircleIds(circleUpdates['circleIdsToRemove'] as List<dynamic>?);
     circlesToChange = _deserializeCircles(circleUpdates['circlesToChange']);
   }
 
@@ -294,26 +275,19 @@ class FakePlatformGoogleMap {
     if (updateTileOverlayUpdates == null) {
       return;
     }
-    final List<Map<dynamic, dynamic>>? tileOverlaysToAddList =
-        updateTileOverlayUpdates['tileOverlaysToAdd'] != null
-            ? List.castFrom<dynamic, Map<dynamic, dynamic>>(
-                updateTileOverlayUpdates['tileOverlaysToAdd'] as List<dynamic>)
-            : null;
-    final List<String>? tileOverlayIdsToRemoveList =
-        updateTileOverlayUpdates['tileOverlayIdsToRemove'] != null
-            ? List.castFrom<dynamic, String>(
-                updateTileOverlayUpdates['tileOverlayIdsToRemove']
-                    as List<dynamic>)
-            : null;
+    final List<Map<dynamic, dynamic>>? tileOverlaysToAddList = updateTileOverlayUpdates['tileOverlaysToAdd'] != null
+        ? List.castFrom<dynamic, Map<dynamic, dynamic>>(updateTileOverlayUpdates['tileOverlaysToAdd'] as List<dynamic>)
+        : null;
+    final List<String>? tileOverlayIdsToRemoveList = updateTileOverlayUpdates['tileOverlayIdsToRemove'] != null
+        ? List.castFrom<dynamic, String>(updateTileOverlayUpdates['tileOverlayIdsToRemove'] as List<dynamic>)
+        : null;
     final List<Map<dynamic, dynamic>>? tileOverlaysToChangeList =
         updateTileOverlayUpdates['tileOverlaysToChange'] != null
             ? List.castFrom<dynamic, Map<dynamic, dynamic>>(
-                updateTileOverlayUpdates['tileOverlaysToChange']
-                    as List<dynamic>)
+                updateTileOverlayUpdates['tileOverlaysToChange'] as List<dynamic>)
             : null;
     tileOverlaysToAdd = _deserializeTileOverlays(tileOverlaysToAddList);
-    tileOverlayIdsToRemove =
-        _deserializeTileOverlayIds(tileOverlayIdsToRemoveList);
+    tileOverlayIdsToRemove = _deserializeTileOverlayIds(tileOverlayIdsToRemoveList);
     tileOverlaysToChange = _deserializeTileOverlays(tileOverlaysToChangeList);
   }
 
@@ -321,9 +295,7 @@ class FakePlatformGoogleMap {
     if (circleIds == null) {
       return <CircleId>{};
     }
-    return circleIds
-        .map((dynamic circleId) => CircleId(circleId as String))
-        .toSet();
+    return circleIds.map((dynamic circleId) => CircleId(circleId as String)).toSet();
   }
 
   Set<Circle> _deserializeCircles(dynamic circles) {
@@ -332,8 +304,7 @@ class FakePlatformGoogleMap {
     }
     final List<dynamic> circlesData = circles as List<dynamic>;
     final Set<Circle> result = <Circle>{};
-    for (final Map<dynamic, dynamic> circleData
-        in circlesData.cast<Map<dynamic, dynamic>>()) {
+    for (final Map<dynamic, dynamic> circleData in circlesData.cast<Map<dynamic, dynamic>>()) {
       final String circleId = circleData['circleId'] as String;
       final bool visible = circleData['visible'] as bool;
       final double radius = circleData['radius'] as double;
@@ -352,13 +323,10 @@ class FakePlatformGoogleMap {
     if (tileOverlayIds == null || tileOverlayIds.isEmpty) {
       return <TileOverlayId>{};
     }
-    return tileOverlayIds
-        .map((String tileOverlayId) => TileOverlayId(tileOverlayId))
-        .toSet();
+    return tileOverlayIds.map((String tileOverlayId) => TileOverlayId(tileOverlayId)).toSet();
   }
 
-  Set<TileOverlay> _deserializeTileOverlays(
-      List<Map<dynamic, dynamic>>? tileOverlays) {
+  Set<TileOverlay> _deserializeTileOverlays(List<Map<dynamic, dynamic>>? tileOverlays) {
     if (tileOverlays == null || tileOverlays.isEmpty) {
       return <TileOverlay>{};
     }
@@ -390,8 +358,7 @@ class FakePlatformGoogleMap {
       mapToolbarEnabled = options['mapToolbarEnabled'] as bool?;
     }
     if (options.containsKey('cameraTargetBounds')) {
-      final List<dynamic> boundsList =
-          options['cameraTargetBounds'] as List<dynamic>;
+      final List<dynamic> boundsList = options['cameraTargetBounds'] as List<dynamic>;
       cameraTargetBounds = boundsList[0] == null
           ? CameraTargetBounds.unbounded
           : CameraTargetBounds(LatLngBounds.fromList(boundsList[0]));
@@ -400,10 +367,8 @@ class FakePlatformGoogleMap {
       mapType = MapType.values[options['mapType'] as int];
     }
     if (options.containsKey('minMaxZoomPreference')) {
-      final List<dynamic> minMaxZoomList =
-          options['minMaxZoomPreference'] as List<dynamic>;
-      minMaxZoomPreference = MinMaxZoomPreference(
-          minMaxZoomList[0] as double?, minMaxZoomList[1] as double?);
+      final List<dynamic> minMaxZoomList = options['minMaxZoomPreference'] as List<dynamic>;
+      minMaxZoomPreference = MinMaxZoomPreference(minMaxZoomList[0] as double?, minMaxZoomList[1] as double?);
     }
     if (options.containsKey('rotateGesturesEnabled')) {
       rotateGesturesEnabled = options['rotateGesturesEnabled'] as bool?;
@@ -450,10 +415,8 @@ class FakePlatformViewsController {
   Future<dynamic> fakePlatformViewsMethodHandler(MethodCall call) {
     switch (call.method) {
       case 'create':
-        final Map<dynamic, dynamic> args =
-            call.arguments as Map<dynamic, dynamic>;
-        final Map<dynamic, dynamic> params =
-            _decodeParams(args['params'] as Uint8List)!;
+        final Map<dynamic, dynamic> args = call.arguments as Map<dynamic, dynamic>;
+        final Map<dynamic, dynamic> params = _decodeParams(args['params'] as Uint8List)!;
         lastCreatedView = FakePlatformGoogleMap(
           args['id'] as int,
           params,
@@ -475,6 +438,11 @@ Map<dynamic, dynamic>? _decodeParams(Uint8List paramsMessage) {
     paramsMessage.offsetInBytes,
     paramsMessage.lengthInBytes,
   );
-  return const StandardMessageCodec().decodeMessage(messageBytes)
-      as Map<dynamic, dynamic>?;
+  return const StandardMessageCodec().decodeMessage(messageBytes) as Map<dynamic, dynamic>?;
 }
+
+/// This allows a value of type T or T? to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become non-nullable can still be used
+/// with `!` and `?` on the stable branch.
+T? _ambiguate<T>(T? value) => value;

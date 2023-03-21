@@ -14,8 +14,7 @@ import 'page.dart';
 const LatLng _center = LatLng(32.080664, 34.9563837);
 
 class ScrollingMapPage extends GoogleMapExampleAppPage {
-  const ScrollingMapPage({Key? key})
-      : super(const Icon(Icons.map), 'Scrolling map', key: key);
+  const ScrollingMapPage({Key? key}) : super(const Icon(Icons.map), 'Scrolling map', key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class ScrollingMapPage extends GoogleMapExampleAppPage {
 }
 
 class ScrollingMapBody extends StatelessWidget {
-  const ScrollingMapBody({Key? key}) : super(key: key);
+  const ScrollingMapBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +68,7 @@ class ScrollingMapBody extends StatelessWidget {
                 const Text("This map doesn't consume the vertical drags."),
                 const Padding(
                   padding: EdgeInsets.only(bottom: 12.0),
-                  child:
-                      Text('It still gets other gestures (e.g scale or tap).'),
+                  child: Text('It still gets other gestures (e.g scale or tap).'),
                 ),
                 Center(
                   child: SizedBox(
@@ -94,8 +92,7 @@ class ScrollingMapBody extends StatelessWidget {
                           ),
                         ),
                       },
-                      gestureRecognizers: <
-                          Factory<OneSequenceGestureRecognizer>>{
+                      gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
                         Factory<OneSequenceGestureRecognizer>(
                           () => ScaleGestureRecognizer(),
                         ),

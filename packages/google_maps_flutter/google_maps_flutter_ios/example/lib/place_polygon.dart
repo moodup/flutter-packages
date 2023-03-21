@@ -11,8 +11,7 @@ import 'example_google_map.dart';
 import 'page.dart';
 
 class PlacePolygonPage extends GoogleMapExampleAppPage {
-  const PlacePolygonPage({Key? key})
-      : super(const Icon(Icons.linear_scale), 'Place polygon', key: key);
+  const PlacePolygonPage({Key? key}) : super(const Icon(Icons.linear_scale), 'Place polygon', key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class PlacePolygonPage extends GoogleMapExampleAppPage {
 }
 
 class PlacePolygonBody extends StatefulWidget {
-  const PlacePolygonBody({Key? key}) : super(key: key);
+  const PlacePolygonBody({super.key});
 
   @override
   State<StatefulWidget> createState() => PlacePolygonBodyState();
@@ -153,8 +152,7 @@ class PlacePolygonBodyState extends State<PlacePolygonBody> {
   void _addHoles(PolygonId polygonId) {
     final Polygon polygon = polygons[polygonId]!;
     setState(() {
-      polygons[polygonId] =
-          polygon.copyWith(holesParam: _createHoles(polygonId));
+      polygons[polygonId] = polygon.copyWith(holesParam: _createHoles(polygonId));
     });
   }
 
@@ -202,21 +200,15 @@ class PlacePolygonBodyState extends State<PlacePolygonBody> {
                           child: const Text('add'),
                         ),
                         TextButton(
-                          onPressed: (selectedId == null)
-                              ? null
-                              : () => _remove(selectedId),
+                          onPressed: (selectedId == null) ? null : () => _remove(selectedId),
                           child: const Text('remove'),
                         ),
                         TextButton(
-                          onPressed: (selectedId == null)
-                              ? null
-                              : () => _toggleVisible(selectedId),
+                          onPressed: (selectedId == null) ? null : () => _toggleVisible(selectedId),
                           child: const Text('toggle visible'),
                         ),
                         TextButton(
-                          onPressed: (selectedId == null)
-                              ? null
-                              : () => _toggleGeodesic(selectedId),
+                          onPressed: (selectedId == null) ? null : () => _toggleGeodesic(selectedId),
                           child: const Text('toggle geodesic'),
                         ),
                       ],
@@ -226,35 +218,25 @@ class PlacePolygonBodyState extends State<PlacePolygonBody> {
                         TextButton(
                           onPressed: (selectedId == null)
                               ? null
-                              : ((polygons[selectedId]!.holes.isNotEmpty)
-                                  ? null
-                                  : () => _addHoles(selectedId)),
+                              : ((polygons[selectedId]!.holes.isNotEmpty) ? null : () => _addHoles(selectedId)),
                           child: const Text('add holes'),
                         ),
                         TextButton(
                           onPressed: (selectedId == null)
                               ? null
-                              : ((polygons[selectedId]!.holes.isEmpty)
-                                  ? null
-                                  : () => _removeHoles(selectedId)),
+                              : ((polygons[selectedId]!.holes.isEmpty) ? null : () => _removeHoles(selectedId)),
                           child: const Text('remove holes'),
                         ),
                         TextButton(
-                          onPressed: (selectedId == null)
-                              ? null
-                              : () => _changeWidth(selectedId),
+                          onPressed: (selectedId == null) ? null : () => _changeWidth(selectedId),
                           child: const Text('change stroke width'),
                         ),
                         TextButton(
-                          onPressed: (selectedId == null)
-                              ? null
-                              : () => _changeStrokeColor(selectedId),
+                          onPressed: (selectedId == null) ? null : () => _changeStrokeColor(selectedId),
                           child: const Text('change stroke color'),
                         ),
                         TextButton(
-                          onPressed: (selectedId == null)
-                              ? null
-                              : () => _changeFillColor(selectedId),
+                          onPressed: (selectedId == null) ? null : () => _changeFillColor(selectedId),
                           child: const Text('change fill color'),
                         ),
                       ],

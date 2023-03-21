@@ -15,8 +15,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'page.dart';
 
 class PlaceMarkerPage extends GoogleMapExampleAppPage {
-  const PlaceMarkerPage({Key? key})
-      : super(const Icon(Icons.place), 'Place marker', key: key);
+  const PlaceMarkerPage({Key? key}) : super(const Icon(Icons.place), 'Place marker', key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class PlaceMarkerPage extends GoogleMapExampleAppPage {
 }
 
 class PlaceMarkerBody extends StatefulWidget {
-  const PlaceMarkerBody({Key? key}) : super(key: key);
+  const PlaceMarkerBody({super.key});
 
   @override
   State<StatefulWidget> createState() => PlaceMarkerBodyState();
@@ -59,8 +58,7 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
       setState(() {
         final MarkerId? previousMarkerId = selectedMarker;
         if (previousMarkerId != null && markers.containsKey(previousMarkerId)) {
-          final Marker resetOld = markers[previousMarkerId]!
-              .copyWith(iconParam: BitmapDescriptor.defaultMarker);
+          final Marker resetOld = markers[previousMarkerId]!.copyWith(iconParam: BitmapDescriptor.defaultMarker);
           markers[previousMarkerId] = resetOld;
         }
         selectedMarker = markerId;
@@ -267,21 +265,18 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
   }
 
   Future<BitmapDescriptor> _getAssetIcon(BuildContext context) async {
-    final Completer<BitmapDescriptor> bitmapIcon =
-        Completer<BitmapDescriptor>();
+    final Completer<BitmapDescriptor> bitmapIcon = Completer<BitmapDescriptor>();
     final ImageConfiguration config = createLocalImageConfiguration(context);
 
     const AssetImage('assets/red_square.png')
         .resolve(config)
         .addListener(ImageStreamListener((ImageInfo image, bool sync) async {
-      final ByteData? bytes =
-          await image.image.toByteData(format: ImageByteFormat.png);
+      final ByteData? bytes = await image.image.toByteData(format: ImageByteFormat.png);
       if (bytes == null) {
         bitmapIcon.completeError(Exception('Unable to encode icon'));
         return;
       }
-      final BitmapDescriptor bitmap =
-          BitmapDescriptor.fromBytes(bytes.buffer.asUint8List());
+      final BitmapDescriptor bitmap = BitmapDescriptor.fromBytes(bytes.buffer.asUint8List());
       bitmapIcon.complete(bitmap);
     }));
 
@@ -314,8 +309,7 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
                 child: const Text('Add'),
               ),
               TextButton(
-                onPressed:
-                    selectedId == null ? null : () => _remove(selectedId),
+                onPressed: selectedId == null ? null : () => _remove(selectedId),
                 child: const Text('Remove'),
               ),
             ],
@@ -324,58 +318,43 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
             alignment: WrapAlignment.spaceEvenly,
             children: <Widget>[
               TextButton(
-                onPressed:
-                    selectedId == null ? null : () => _changeInfo(selectedId),
+                onPressed: selectedId == null ? null : () => _changeInfo(selectedId),
                 child: const Text('change info'),
               ),
               TextButton(
-                onPressed: selectedId == null
-                    ? null
-                    : () => _changeInfoAnchor(selectedId),
+                onPressed: selectedId == null ? null : () => _changeInfoAnchor(selectedId),
                 child: const Text('change info anchor'),
               ),
               TextButton(
-                onPressed:
-                    selectedId == null ? null : () => _changeAlpha(selectedId),
+                onPressed: selectedId == null ? null : () => _changeAlpha(selectedId),
                 child: const Text('change alpha'),
               ),
               TextButton(
-                onPressed:
-                    selectedId == null ? null : () => _changeAnchor(selectedId),
+                onPressed: selectedId == null ? null : () => _changeAnchor(selectedId),
                 child: const Text('change anchor'),
               ),
               TextButton(
-                onPressed: selectedId == null
-                    ? null
-                    : () => _toggleDraggable(selectedId),
+                onPressed: selectedId == null ? null : () => _toggleDraggable(selectedId),
                 child: const Text('toggle draggable'),
               ),
               TextButton(
-                onPressed:
-                    selectedId == null ? null : () => _toggleFlat(selectedId),
+                onPressed: selectedId == null ? null : () => _toggleFlat(selectedId),
                 child: const Text('toggle flat'),
               ),
               TextButton(
-                onPressed: selectedId == null
-                    ? null
-                    : () => _changePosition(selectedId),
+                onPressed: selectedId == null ? null : () => _changePosition(selectedId),
                 child: const Text('change position'),
               ),
               TextButton(
-                onPressed: selectedId == null
-                    ? null
-                    : () => _changeRotation(selectedId),
+                onPressed: selectedId == null ? null : () => _changeRotation(selectedId),
                 child: const Text('change rotation'),
               ),
               TextButton(
-                onPressed: selectedId == null
-                    ? null
-                    : () => _toggleVisible(selectedId),
+                onPressed: selectedId == null ? null : () => _toggleVisible(selectedId),
                 child: const Text('toggle visible'),
               ),
               TextButton(
-                onPressed:
-                    selectedId == null ? null : () => _changeZIndex(selectedId),
+                onPressed: selectedId == null ? null : () => _changeZIndex(selectedId),
                 child: const Text('change zIndex'),
               ),
               TextButton(
@@ -403,14 +382,8 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              if (markerPosition == null)
-                Container()
-              else
-                Expanded(child: Text('lat: ${markerPosition!.latitude}')),
-              if (markerPosition == null)
-                Container()
-              else
-                Expanded(child: Text('lng: ${markerPosition!.longitude}')),
+              if (markerPosition == null) Container() else Expanded(child: Text('lat: ${markerPosition!.latitude}')),
+              if (markerPosition == null) Container() else Expanded(child: Text('lng: ${markerPosition!.longitude}')),
             ],
           ),
         ),
