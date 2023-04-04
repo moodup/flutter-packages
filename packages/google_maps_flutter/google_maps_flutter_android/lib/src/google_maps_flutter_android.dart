@@ -573,7 +573,7 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
     MapObjects mapObjects = const MapObjects(),
     Map<String, dynamic> mapOptions = const <String, dynamic>{},
   }) {
-    final Map<String, dynamic> creationParams = <String, dynamic>{
+    late Map<String, dynamic> creationParams = <String, dynamic>{
       'initialCameraPosition': widgetConfiguration.initialCameraPosition.toMap(),
       'options': mapOptions,
       'markersToAdd': serializeMarkerSet(mapObjects.markers),
