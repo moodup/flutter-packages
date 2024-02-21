@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+//Using google_maps_2.2.5_android_18.2
+
 part of google_maps_flutter;
 
 /// Callback method for when the map is ready to be used.
@@ -303,7 +305,8 @@ class _GoogleMapState extends State<GoogleMap> {
       _mapId,
       onPlatformViewCreated,
       widgetConfiguration: MapWidgetConfiguration(
-        textDirection: widget.layoutDirection ?? Directionality.maybeOf(context) ?? TextDirection.ltr,
+        textDirection:
+            widget.layoutDirection ?? Directionality.maybeOf(context) ?? TextDirection.ltr,
         initialCameraPosition: widget.initialCameraPosition,
         gestureRecognizers: widget.gestureRecognizers,
       ),
@@ -401,7 +404,8 @@ class _GoogleMapState extends State<GoogleMap> {
   Future<void> _updateGroundOverlays() async {
     final GoogleMapController controller = await _controller.future;
     // ignore: unawaited_futures
-    controller._updateGroundOverlays(GroundOverlayUpdates.from(_groundOverlays.values.toSet(), widget.groundOverlays));
+    controller._updateGroundOverlays(
+        GroundOverlayUpdates.from(_groundOverlays.values.toSet(), widget.groundOverlays));
     _groundOverlays = keyByGroundOverlayId(widget.groundOverlays);
   }
 
